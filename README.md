@@ -24,3 +24,9 @@ The bot can be configured with environment variables:
     # optional - comma separated list of highlighting for users that voted for a certain emoji
     EMOJI_HIGHLIGHTING=*,~~
 
+## TODOs
+- set up poetry
+- add github action to deploy to heroku
+- add github actions for code formatting and tests
+- extend url crawling
+- improve caching implementation
