@@ -1,0 +1,21 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "discord-poll-bot" # Must be unique in Heroku
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          buildpack: https://github.com/moneymeets/python-poetry-buildpack.git
+        env:
+          HD_DISCORD_BOT_TOKEN: ${{secrets.DISCORD_BOT_TOKEN}}
+          HD_BOT_NAME:  ${{secrets.BOT_NAME}}
+          HD_CHANNEL_NAMES:  ${{secrets.CHANNEL_NAMES}}
