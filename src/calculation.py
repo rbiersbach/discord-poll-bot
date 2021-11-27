@@ -7,7 +7,7 @@ from linkpreview import link_preview
 
 from message_utils import has_votes, this_year
 from models import MessageOverview, Vote
-from settings import EMOJIS, EMOJI_HIGHLIGHTING, URL_REGEX, BOT_NAME
+from settings import BOT_NAME, EMOJIS, EMOJI_HIGHLIGHTING, URL_REGEX
 
 executor = ThreadPoolExecutor(max_workers=10)
 loop = asyncio.get_event_loop()

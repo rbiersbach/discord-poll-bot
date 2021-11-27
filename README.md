@@ -25,7 +25,6 @@ The bot can be configured with environment variables:
     EMOJI_HIGHLIGHTING=*,~~
 
 ## TODOs
-- set up poetry
 - add github action to deploy to heroku
 - add github actions for code formatting and tests
 - extend url crawling
