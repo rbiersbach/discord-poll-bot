@@ -27,11 +27,12 @@ The bot can be configured with environment variables:
 ## Deployment
 Every push to the `main` branch triggers a deployment to heroku.
 To make this run you need to know a few details:
-1. The github action seems to support only one buildpack, making it mandatory to run `heroku buildpacks:add heroku/python -a ${HEROKU_APP_NAME}` after the first successful deployment.
-2. As the process is run as a worker (see `Procfile`) we need to scale the number up have a running process with `heroku ps:scale worker=1 -a ${HEROKU_APP_NAME}`
+1. The github-action seems to support only one buildpack, making it mandatory to run `heroku buildpacks:add heroku/python -a ${HEROKU_APP_NAME}` after the first successful deployment.
+2. As the process is run as a worker (see `Procfile`) we need to scale the number up with `heroku ps:scale worker=1 -a ${HEROKU_APP_NAME}` to have a running process 
 3. You can watch the logs with: `heroku logs -a ${HEROKU_APP_NAME} -t`
 
 ## TODOs
-- add github actions for code formatting and tests
+- add github-actions for code formatting and tests
 - extend url crawling
 - improve caching implementation
+- use json config and title cleanup to config (removal of prefixes and suffixes)
