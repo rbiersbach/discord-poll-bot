@@ -15,6 +15,7 @@ jobs:
           heroku_app_name: "rbiersbach-discord-poll-bot" # Must be unique in Heroku
           heroku_email: ${{secrets.HEROKU_EMAIL}}
           buildpack: https://github.com/moneymeets/python-poetry-buildpack.git
+          region: eu
         env:
           HD_DISCORD_BOT_TOKEN: ${{secrets.DISCORD_BOT_TOKEN}}
           HD_BOT_NAME:  ${{secrets.BOT_NAME}}
