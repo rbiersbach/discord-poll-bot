@@ -1,11 +1,12 @@
 import asyncio
 import re
 from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime
 from typing import Dict
 
 from linkpreview import link_preview
 
-from message_utils import has_votes, this_year
+from message_utils import has_votes
 from models import MessageOverview, Vote
 from settings import BOT_NAME, EMOJIS, EMOJI_HIGHLIGHTING, URL_REGEX
 
@@ -28,13 +29,15 @@ class Calculation:
         await channel.send("on it :new_moon_with_face:")
 
         # calculate overview for all messages with votes in a certain time frame
-        history_with_votes = channel.history().filter(has_votes).filter(this_year)
+        first_day_of_year = datetime(year=datetime.now().year, month=1, day=1)
+        history_with_votes = channel.history(limit=1000, after=first_day_of_year).filter(has_votes)
+
         overview_tasks = [self._calculate_message(channel_message) async for channel_message in history_with_votes]
         print(f"Processing {len(overview_tasks)} messages!")
         message_overviews = await asyncio.gather(*overview_tasks)
 
-        # sort by entries with down-votes lowest then by highest up-votes
-        sorted_message_overviews = sorted(message_overviews, key=lambda o: (o.votes[-1].count, -o.votes[0].count))
+        # sort by entries with difference of down-votes to up-votes
+        sorted_message_overviews = sorted(message_overviews, key=lambda o: - (o.votes[0].count - o.votes[-1].count))
 
         # figure out longest title to have a clean alignment
         max_title_length = len(max(message_overviews, key=lambda o: len(o.title)).title)
