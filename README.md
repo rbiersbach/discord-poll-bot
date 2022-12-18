@@ -21,9 +21,6 @@ The bot can be configured with environment variables:
     # optional - comma separated emojis that should be considered for the processing
     EMOJIS=👍,👎
 
-    # optional - comma separated list of highlighting for users that voted for a certain emoji
-    EMOJI_HIGHLIGHTING=*,~~
-
 ## Deployment
 Every push to the `main` branch triggers a deployment to heroku.
 To make this run you need to know a few details:

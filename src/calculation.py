@@ -8,13 +8,15 @@ from linkpreview import link_preview
 
 from message_utils import has_votes
 from models import MessageOverview, Vote
-from settings import BOT_NAME, EMOJIS, EMOJI_HIGHLIGHTING, URL_REGEX
+from settings import BOT_NAME, EMOJIS, URL_REGEX
 
 executor = ThreadPoolExecutor(max_workers=10)
 
 
 
 class Calculation:
+    calculation_running = False
+    calculation_waiting = False
     preview_request_cache: Dict[str, str] = {}
 
     async def calculate_overview(self, channel):
@@ -25,7 +27,15 @@ class Calculation:
         :param channel: the channel where the scoreboard calculation should take place
         :return:
         """
+        if self.calculation_running:
+            print("Calculation aborted because already running!")
+            self.calculation_waiting = True
+            return
+
         print("Starting calculation of scoreboard overview!")
+        self.calculation_running = True
+        self.calculation_waiting = False
+
         await channel.send("on it :new_moon_with_face:")
 
         # calculate overview for all messages with votes in a certain time frame
@@ -52,14 +62,17 @@ class Calculation:
             stats = " ".join(map(lambda vote: f"{vote.emoji}{vote.count}", overview.votes))
 
             # show user names differing by format depending on emoji
-            highlighted_users = []
-            for vote_highlight in zip(overview.votes, EMOJI_HIGHLIGHTING):
-                vote, highlight = vote_highlight
+            user_emojis = {}
+            for vote in overview.votes:
                 for user in vote.users:
-                    highlighted_users.append(highlight + user + highlight)
-            users = " ".join(highlighted_users)
+                    emojis = user_emojis.get(user) or []
+                    emojis.append(vote.emoji)
+                    user_emojis[user] = emojis
 
-            new_line = f"`{title} {stats}` {users}\n"
+            users = ""
+            for user, emojis in user_emojis.items():
+                users = users + f" `{user} {''.join(emojis)}`"
+            new_line = f"`{title} {stats}`    {users}\n"
 
             # discord only allows messages with a maximum of 2000 characters
             if len(current_message + new_line) > 2000:
@@ -78,6 +91,11 @@ class Calculation:
             await channel.send(scoreboard_message)
 
         print("Finished calculation of overview!")
+
+        self.calculation_running = False
+        if self.calculation_waiting:
+            print("Repeat calculation as one or more changes happened in the meantime!")
+            await self.calculate_overview(channel)
 
     async def _calculate_message(self, message, loop) -> MessageOverview:
         """
