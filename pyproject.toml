@@ -5,8 +5,8 @@ description = ""
 authors = ["Raphael Biersbach <raphael.biersbach@gmx.net>"]
 
 [tool.poetry.dependencies]
-python = "3.9.7"
-discord = "^1.7.3"
+python = "3.10.x"
+discord = "2.1.0"
 attr = "^0.3.1"
 linkpreview = "^0.2.0"
 

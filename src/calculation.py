@@ -11,7 +11,7 @@ from models import MessageOverview, Vote
 from settings import BOT_NAME, EMOJIS, EMOJI_HIGHLIGHTING, URL_REGEX
 
 executor = ThreadPoolExecutor(max_workers=10)
-loop = asyncio.get_event_loop()
+
 
 
 class Calculation:
@@ -30,9 +30,10 @@ class Calculation:
 
         # calculate overview for all messages with votes in a certain time frame
         first_day_of_year = datetime(year=datetime.now().year, month=1, day=1)
-        history_with_votes = channel.history(limit=1000, after=first_day_of_year).filter(has_votes)
+        history_with_votes = channel.history(limit=1000, after=first_day_of_year)
 
-        overview_tasks = [self._calculate_message(channel_message) async for channel_message in history_with_votes]
+        loop = asyncio.get_event_loop()
+        overview_tasks = [self._calculate_message(channel_message, loop) async for channel_message in history_with_votes if has_votes(channel_message)]
         print(f"Processing {len(overview_tasks)} messages!")
         message_overviews = await asyncio.gather(*overview_tasks)
 
@@ -78,7 +79,7 @@ class Calculation:
 
         print("Finished calculation of overview!")
 
-    async def _calculate_message(self, message) -> MessageOverview:
+    async def _calculate_message(self, message, loop) -> MessageOverview:
         """
         gathers insights like title of included url and votes from a message
         :param message: the message that is being processed
@@ -89,7 +90,7 @@ class Calculation:
         if url:
             try:
                 # if there is an url then get the preview title
-                title = await self._get_title_url(url[0][0])
+                title = await self._get_title_url(url[0][0], loop)
             except Exception as e:
                 print(e)
                 # if it fails take the last part of the url
@@ -106,7 +107,7 @@ class Calculation:
             reaction = next(filter(lambda reaction: reaction.emoji == emoji, message.reactions), None)
             if reaction:
                 count = reaction.count
-                users = await reaction.users().flatten()
+                users = [user async for user in reaction.users()]
             vote = Vote(emoji=emoji, users=[u.display_name for u in users], count=count)
             votes.append(vote)
 
@@ -120,7 +121,7 @@ class Calculation:
         )
         return result
 
-    async def _get_title_url(self, url: str) -> str:
+    async def _get_title_url(self, url: str, loop) -> str:
         """
         Get the preview title of a url to have a human readable text to display
         :param url: url that should be queried for a title
@@ -146,7 +147,6 @@ class Calculation:
         :param message:
         :return:
         """
-        old_bot_messages = channel.history().filter(lambda message: message.author.name == BOT_NAME)
-        old_bot_message_tasks = [bot_message.delete() async for bot_message in old_bot_messages]
+        old_bot_message_tasks = [bot_message.delete() async for bot_message in channel.history() if bot_message.author.name == BOT_NAME]
         print(f"Deleting {len(old_bot_message_tasks)} old messages!")
         await asyncio.gather(*old_bot_message_tasks)
