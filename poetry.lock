@@ -206,8 +206,8 @@ multidict = ">=4.0"
 
 [metadata]
 lock-version = "1.1"
-python-versions = "3.10.x"
-content-hash = "fe185a3092fcd9a08e7b9a82a10947e25c0fb00e20c3cc43d5dff0191c7b34db"
+python-versions = "3.10.8"
+content-hash = "1c11c15481fee4f4291115eb5eb8324aab518d68e2042bba9615b8a4aa5173e6"
 
 [metadata.files]
 aiohttp = [
