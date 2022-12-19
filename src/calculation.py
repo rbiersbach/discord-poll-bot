@@ -48,7 +48,7 @@ class Calculation:
         message_overviews = await asyncio.gather(*overview_tasks)
 
         # sort by entries with difference of down-votes to up-votes
-        sorted_message_overviews = sorted(message_overviews, key=lambda o: - (o.votes[0].count - o.votes[-1].count))
+        sorted_message_overviews = sorted(message_overviews, key=lambda o: - (o.votes[0].count - o.votes[1].count))
 
         # figure out longest title to have a clean alignment
         max_title_length = len(max(message_overviews, key=lambda o: len(o.title)).title)
