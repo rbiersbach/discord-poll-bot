@@ -13,7 +13,6 @@ from settings import BOT_NAME, EMOJIS, URL_REGEX
 executor = ThreadPoolExecutor(max_workers=10)
 
 
-
 class Calculation:
     calculation_running = False
     calculation_waiting = False
@@ -43,7 +42,8 @@ class Calculation:
         history_with_votes = channel.history(limit=1000, after=first_day_of_year)
 
         loop = asyncio.get_event_loop()
-        overview_tasks = [self._calculate_message(channel_message, loop) async for channel_message in history_with_votes if has_votes(channel_message)]
+        overview_tasks = [self._calculate_message(channel_message, loop) async for channel_message in
+                          history_with_votes if has_votes(channel_message)]
         print(f"Processing {len(overview_tasks)} messages!")
         message_overviews = await asyncio.gather(*overview_tasks)
 
@@ -157,6 +157,14 @@ class Calculation:
         removed_suffix = preview.title.removesuffix(" on Steam")
         removed_prefix = re.sub(r"Save \d{1,2}% on ", "", removed_suffix)
         removed_prefix = removed_prefix.removeprefix("Ubisoft - ")
+
+        # get steam price if available
+        price_meta = preview.opengraph._soup.find("meta", attrs={"itemprop": "price"})
+        currency_meta = preview.opengraph._soup.find("meta", attrs={"itemprop": "priceCurrency"})
+        if price_meta and currency_meta:
+            price = price_meta["content"]
+            currency = currency_meta["content"].replace("EUR", "€").replace("USD", "$")
+            return f"{removed_prefix} - {price}{currency}"
         return removed_prefix
 
     async def _delete_previous_messages(self, channel):
@@ -165,6 +173,7 @@ class Calculation:
         :param message:
         :return:
         """
-        old_bot_message_tasks = [bot_message.delete() async for bot_message in channel.history() if bot_message.author.name == BOT_NAME]
+        old_bot_message_tasks = [bot_message.delete() async for bot_message in channel.history() if
+                                 bot_message.author.name == BOT_NAME]
         print(f"Deleting {len(old_bot_message_tasks)} old messages!")
         await asyncio.gather(*old_bot_message_tasks)

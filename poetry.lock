@@ -27,7 +27,7 @@ python-versions = ">=3.5.3"
 
 [[package]]
 name = "attr"
-version = "0.3.1"
+version = "0.3.2"
 description = "Simple decorator to set attributes of target function or class in a DRY way."
 category = "main"
 optional = false
@@ -127,7 +127,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "linkpreview"
-version = "0.2.0"
+version = "0.5.0"
 description = "Get link (URL) preview"
 category = "main"
 optional = false
@@ -207,7 +207,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "3.10.8"
-content-hash = "1c11c15481fee4f4291115eb5eb8324aab518d68e2042bba9615b8a4aa5173e6"
+content-hash = "1f507d302d490f2dbed10021c42b82f22d250db6acf77478c89d72011eaad0a8"
 
 [metadata.files]
 aiohttp = [
@@ -254,8 +254,8 @@ async-timeout = [
     {file = "async_timeout-3.0.1-py3-none-any.whl", hash = "sha256:4291ca197d287d274d0b6cb5d6f8f8f82d434ed288f962539ff18cc9012f9ea3"},
 ]
 attr = [
-    {file = "attr-0.3.1-py2-none-any.whl", hash = "sha256:0b1aaddb85bd9e9c4bd75092f4440d6616ff40b0df0437f00771871670f7c9fd"},
-    {file = "attr-0.3.1.tar.gz", hash = "sha256:9091548058d17f132596e61fa7518e504f76b9a4c61ca7d86e1f96dbf7d4775d"},
+    {file = "attr-0.3.2-py2.py3-none-any.whl", hash = "sha256:4f4bffeea8c27387bde446675a7ac24f3b8fea1075f12d849b5f5c5181fc8336"},
+    {file = "attr-0.3.2.tar.gz", hash = "sha256:1ceebca768181cdcce9827611b1d728e592be5d293911539ea3d0b0bfa1146f4"},
 ]
 attrs = [
     {file = "attrs-21.2.0-py2.py3-none-any.whl", hash = "sha256:149e90d6d8ac20db7a955ad60cf0e6881a3f20d37096140088356da6c716b0b1"},
@@ -290,7 +290,8 @@ idna = [
     {file = "idna-3.3.tar.gz", hash = "sha256:9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d"},
 ]
 linkpreview = [
-    {file = "linkpreview-0.2.0.tar.gz", hash = "sha256:24f893be1953fbd996e39f8e1c0e86bcab2924963e662c87870c0adc43e6eb6f"},
+    {file = "linkpreview-0.5.0-py3-none-any.whl", hash = "sha256:60987085ba55a8dd1e1a66165944d907ab084ee21a3e3e6853c5f8b2af9bf770"},
+    {file = "linkpreview-0.5.0.tar.gz", hash = "sha256:57b31c8d7375970770a3b84959e3e3a10ec5b46b4b264c377cdbb0a2c0a1280f"},
 ]
 multidict = [
     {file = "multidict-5.2.0-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:3822c5894c72e3b35aae9909bef66ec83e44522faf767c0ad39e0e2de11d3b55"},
